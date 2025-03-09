@@ -1,15 +1,10 @@
 package dev.pronunciationAppBack.controller;
 
-import dev.pronunciationAppBack.model.User;
-import dev.pronunciationAppBack.model.Word;
-import dev.pronunciationAppBack.service.UserService;
-import jakarta.validation.Valid;
+import dev.pronunciationAppBack.model.*;
+import dev.pronunciationAppBack.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.List;
 import java.util.Optional;
@@ -19,56 +14,39 @@ import java.util.Optional;
 public class UserController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
-    @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        return new ResponseEntity<>(userService.getAllUsers(), getCommonHeaders(), HttpStatus.OK);
+    @PostMapping
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        User createdUser = userService.createUser(user);
+        return ResponseEntity.ok(createdUser);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getById(@PathVariable String id) {
-        Optional<User> user = userService.getById(id);
-        HttpHeaders headers = getCommonHeaders();
-
-        return user.map(value -> new ResponseEntity<>(value, headers, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(headers, HttpStatus.NOT_FOUND));
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        Optional<User> user = userService.getUserById(id);
+        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
-        Optional<User> created = userService.createUser(user);
-
-        HttpHeaders headers = getCommonHeaders();
-
-        return created.map(value -> new ResponseEntity<>(value, headers, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST));
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable String id, @Valid @RequestBody User user) {
-        Optional<User> edited = userService.updateUser(id, user);
-
-        HttpHeaders headers = getCommonHeaders();
-
-        return edited.map(value -> new ResponseEntity<>(value, headers, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST));
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
+        User updatedUser = userService.updateUser(id, userDetails);
+        if (updatedUser != null) {
+            return ResponseEntity.ok(updatedUser);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") String idToDelete) {
-        Optional<String> msg = userService.deleteUser(idToDelete);
-
-        HttpHeaders headers = getCommonHeaders();
-
-        return msg.map(value -> new ResponseEntity<>(value, headers, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST));
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
-
-    private HttpHeaders getCommonHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("content-type", "application/json");
-        return headers;
-    }
-
 }

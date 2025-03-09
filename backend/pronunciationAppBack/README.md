@@ -1,53 +1,51 @@
-## Descripción
-Este PR implementa la gestión de usuarios en una aplicación **Spring Boot**, cumpliendo con los siguientes requisitos:
 
-1. **Crear la entidad User**
-    - Se ha diseñado una entidad de usuario con los campos relevantes.
-    - Se han añadido anotaciones de **JPA** para la persistencia.
-    - Se han implementado **validaciones** con `@Id , @NotNull`, `@Email`, `@Min(18)`.
 
-2. **Desarrollar UserController**
-    - Se han creado **endpoints RESTful** para la gestión de usuarios.
-    - Se ha añadido **manejo de errores** apropiado.
-    - Se ha utilizado `ResponseEntity` para respuestas flexibles.
+# Descripción
+Este PR introduce mejoras en la estructura de datos de la aplicación Spring Boot, enfocándose en la optimización del modelo de entidades y la correcta implementación de relaciones en JPA. Se han revisado y actualizado las relaciones One-to-One, Many-to-Many, One-to-Many y Many-to-One, asegurando una configuración eficiente y acorde con las mejores prácticas. Además, se han implementado repositorios, servicios y pruebas para validar el correcto funcionamiento del sistema.
 
-3. **Implementar UserRepository**
-    - Se ha extendido `JpaRepository`.
-    - Se ha asegurado una correcta interacción con la base de datos.
 
-4. **Configurar la base de datos H2**
-    - Se ha configurado **`application.properties`** para usar H2 en local.
-    - Se han definido los parámetros de conexión.
-    - Se ha habilitado la **consola H2** para desarrollo.
+1. **Review and Improve Model v0.2**
+    - Se ha analizado el diagrama de clases proporcionado.
+    - Se han identificado mejoras o relaciones faltantes.
+    - Se ha actualizado el modelo según sea necesario.
 
-5. **Desarrollar UserService**
-    - Se ha implementado la **lógica de negocio** para operaciones con usuarios.
-    - Se ha agregado una capa de servicio entre el controlador y el repositorio.
-    - Se ha incluido **validación y transformación de datos**.
+2. **Implement One-to-One: User y GameProgress**
+    - Se ha creado una relación bidireccional **One-to-One**.
+    - Se ha definido a **User** como el lado propietario de la relación.
+    - Se han utilizado las anotaciones adecuadas de JPA (`@OneToOne`, `@JoinColumn`).
 
-6. **Pruebas con Postman**
-    - Se ha creado una colección de pruebas para los **endpoints de usuario**.
-    - Se han probado todas las operaciones **CRUD**.
-    - Se ha verificado la **integridad de los datos y códigos de respuesta**.
+3. **Crear Many-to-Many: Word y Category**
+    - Se ha implementado una relación **Many-to-Many**.
+    - Se ha creado una tabla de unión utilizando la anotación `@JoinTable`.
+    - Se ha configurado la relación bidireccional si era necesario.
+
+4. **Implementar One-to-Many y Many-to-One Relationships**
+    - Se han identificado e implementado todas las relaciones **One-to-Many** y **Many-to-One** a partir del diagrama de clases.
+    - Se han utilizado las anotaciones correspondientes (`@OneToMany`, `@ManyToOne`).
+    - Se han configurado los tipos de cascada y estrategias de recuperación adecuadas.
+
+5. **Configurar Anotaciones de JPA**
+    - Se han asegurado que todas las entidades tengan las anotaciones adecuadas de JPA.
+    - Se ha configurado `@Id, @GeneratedValue` para las claves primarias.
+    - Se han utilizado `@Column` para configuraciones específicas de las columnas.
+
+6. **Crear Interfaces de Repositorio**
+    - Se han desarrollado interfaces `JpaRepository` para cada entidad.
+    - Se han añadido métodos de consulta personalizados si era necesario.
+
+7. **Implementar Métodos Básicos de Servicio**
+    - Se han creado clases de servicio para cada entidad.
+    - Se han implementado operaciones **CRUD** en la capa de servicio.
+
+8. **Probar Relaciones**
+    - Se ha creado una clase de prueba para poblar la base de datos con datos de muestra.
+    - Se ha verificado que todas las relaciones funcionan correctamente.
+    - Se han probado las operaciones en cascada y las estrategias de recuperación.
 
 ---
 
 ## Capturas
 
-### **Pruebas en Postman**
-Se han ejecutado y validado las peticiones.
->️ **Obener los usuarios**
-![Get all users](screenshots/getallusers.png)
-> **Obener usuario por id**
-![Get user by id](screenshots/getuserbyid.png)
-> **Crear usuario**
-![Create user](screenshots/createuser.png)
-> **Actualizar usuario**
-![Update user](screenshots/updateuser.png)
-> **Eliminar usuario**
-![Delete user](screenshots/deleteuser.png)
-
-### 🛢️ **Base de Datos H2 en el Navegador**
-Se ha verificado la persistencia de los datos en H2.
-
-![BD H2 en navegador](screenshots/bdh2.png)
+### **Análisis y Mejora del Modelo**
+> **Diagrama de clases actualizado**
+![Class Diagram](screenshots/newModelUml.png)

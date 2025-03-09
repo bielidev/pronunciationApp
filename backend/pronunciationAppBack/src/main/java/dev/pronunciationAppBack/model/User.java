@@ -1,108 +1,46 @@
 package dev.pronunciationAppBack.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import lombok.Data;
+import java.util.List;
 
 @Entity
+@Data
 public class User {
-
     @Id
-    private String id;
-    @NotNull
-    private String userName;
-    @NotNull
-    private String firstName;
-    private String lastName;
-    @NotNull
-    @Email
-    private String email;
-    private boolean isActive;
-    @Min(18)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, updatable = false)
+    private Long id;
+
+    @Column(name = "username", nullable = false)
+    private String username;
+
+    @Column(name = "age", nullable = false)
     private int age;
 
-    public User(String id, String userName, String firstName, String lastName, String email, boolean isActive, int age) {
-        this.id = id;
-        this.userName = userName;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.isActive = isActive;
-        this.age = age;
+    @Column(name = "email", nullable = false)
+    private String email;
+
+    @Column(name = "total_score", nullable = false)
+    private int totalScore;
+
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<GameProgress> gameProgresses;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Attempt> attempts;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private GameProgress gameProgress;
+
+    public String getName() {
+        return username;
     }
 
-    public User() {
-
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", userName='" + userName + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", isActive=" + isActive +
-                ", age=" + age +
-                '}';
+    public void setName(String name) {
+        this.username = name;
     }
 }
