@@ -1,15 +1,15 @@
 
 
 # Descripción
-Este PR introduce mejoras en la estructura de datos de la aplicación Spring Boot, enfocándose en la optimización del modelo de entidades y la correcta implementación de relaciones en JPA. Se han revisado y actualizado las relaciones One-to-One, Many-to-Many, One-to-Many y Many-to-One, asegurando una configuración eficiente y acorde con las mejores prácticas. Además, se han implementado repositorios, servicios y pruebas para validar el correcto funcionamiento del sistema.
+Este PR introduce mejoras en la estructura de datos de la aplicación Spring Boot, enfocándose en la optimización del modelo de entidades y la correcta implementación de relaciones en JPA. Se han creado las relaciones One-to-One, Many-to-Many, One-to-Many y Many-to-One. Además, se han implementado pruebas para validar el correcto funcionamiento del sistema.
 
 
-1. **Review and Improve Model v0.2**
+1. **Revisar y Mejorar Model v0.2**
     - Se ha analizado el diagrama de clases proporcionado.
     - Se han identificado mejoras o relaciones faltantes.
     - Se ha actualizado el modelo según sea necesario.
 
-2. **Implement One-to-One: User y GameProgress**
+2. **Implementar One-to-One: User y GameProgress**
     - Se ha creado una relación bidireccional **One-to-One**.
     - Se ha definido a **User** como el lado propietario de la relación.
     - Se han utilizado las anotaciones adecuadas de JPA (`@OneToOne`, `@JoinColumn`).
